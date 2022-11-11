@@ -1,12 +1,13 @@
 package com.cydeo.entity;
 
 import com.cydeo.enums.Gender;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Data
+@Setter
+@Getter
+@ToString
 @NoArgsConstructor
 public class User extends BaseEntity {
 
