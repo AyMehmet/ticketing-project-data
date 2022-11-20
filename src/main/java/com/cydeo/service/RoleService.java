@@ -9,4 +9,6 @@ import java.util.List;
 public interface RoleService  {
 
     List<RoleDTO>  ListAllRoles();
+
+    RoleDTO findById(long id);
 }
