@@ -31,10 +31,19 @@ public class UserServiceImpl implements UserService {
         userRepository.save(userMapper.convertToEntity(userDTO));
     }
 
+    //Hard Delete Method
+//    @Override
+//    public void deleteById(String username) {
+//        userRepository.delete(userRepository.findUserByUserName(username));
+//    }
+
     @Override
     public void deleteById(String username) {
-        userRepository.delete(userRepository.findUserByUserName(username));
+
+        User deletedUser=userRepository.findUserByUserName(username);
+        deletedUser.setIsdeleted(true);
     }
+
 
     @Override
     public UserDTO findbyID(String username) {
