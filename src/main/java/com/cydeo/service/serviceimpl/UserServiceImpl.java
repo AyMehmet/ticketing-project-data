@@ -26,6 +26,12 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll().stream().map(userMapper::convertToDto).collect(Collectors.toList());
     }
 
+
+//    @Override
+//    public List<UserDTO> ListAllUsers() {
+//        return userRepository.findAll().stream().filter(user -> user.getIsDeleted()==false).map(userMapper::convertToDto).collect(Collectors.toList());
+//    }
+
     @Override
     public void save(UserDTO userDTO) {
         userRepository.save(userMapper.convertToEntity(userDTO));
