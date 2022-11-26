@@ -21,7 +21,7 @@ public class BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private boolean isdeleted=false;
+    private Boolean isDeleted=false;
 
     private LocalDateTime insertDateTime;
     private Long insertUserId;
