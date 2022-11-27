@@ -1,9 +1,13 @@
 package com.cydeo.service.serviceimpl;
 
 import com.cydeo.dto.ProjectDTO;
+import com.cydeo.entity.Project;
+import com.cydeo.entity.User;
+import com.cydeo.enums.Status;
 import com.cydeo.mapper.ProjectMapper;
 import com.cydeo.repository.ProjectRepository;
 import com.cydeo.service.ProjectService;
+import com.cydeo.service.UserService;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -15,15 +19,17 @@ public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectRepository projectRepository;
     private final ProjectMapper projectMapper;
+    private final UserService userService;
 
-    public ProjectServiceImpl(ProjectRepository projectRepository, ProjectMapper projectMapper) {
+    public ProjectServiceImpl(ProjectRepository projectRepository, ProjectMapper projectMapper, UserService userService) {
         this.projectRepository = projectRepository;
         this.projectMapper = projectMapper;
+        this.userService = userService;
     }
 
     @Override
     public ProjectDTO getByProjectCode(String code) {
-        return null;
+        return projectMapper.convertToDto(projectRepository.findProjectByProjectCodeIgnoreCase(code));
     }
 
     @Override
@@ -33,22 +39,37 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public void save(ProjectDTO projectDTO) {
-        projectRepository.save(projectMapper.convertToEntity(projectDTO));
+
+        projectDTO.setProjectStatus(Status.OPEN);
+        Project project=projectMapper.convertToEntity(projectDTO);
+
+       projectRepository.save(project);
 
     }
 
     @Override
     public void update(ProjectDTO dto) {
+       Project currentProject=projectRepository.findProjectByProjectCodeIgnoreCase(dto.getProjectCode());
+       Project updatedProject=projectMapper.convertToEntity(dto);
+       updatedProject.setId(currentProject.getId());
+       updatedProject.setProjectStatus(currentProject.getProjectStatus());
+       projectRepository.save(updatedProject);
 
     }
 
     @Override
     public void delete(String code) {
+        Project deletedProject=projectRepository.findProjectByProjectCodeIgnoreCase(code);
+        deletedProject.setIsDeleted(true);
+        projectRepository.save(deletedProject);
 
     }
 
     @Override
     public void complete(String projectCode) {
+        Project currentProject=projectRepository.findProjectByProjectCodeIgnoreCase(projectCode);
+        currentProject.setProjectStatus(Status.COMPLETE);
+        projectRepository.save(currentProject);
 
     }
 }

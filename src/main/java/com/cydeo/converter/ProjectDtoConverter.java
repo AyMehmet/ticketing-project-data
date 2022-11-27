@@ -3,6 +3,8 @@ package com.cydeo.converter;
 import com.cydeo.dto.ProjectDTO;
 //import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
 import com.cydeo.service.ProjectService;
+import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
