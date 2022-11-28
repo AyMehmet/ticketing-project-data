@@ -14,4 +14,7 @@ public interface TaskService {
     List<TaskDTO> listAllNonCompletedTask();
     List<TaskDTO> listAllCompletedTask();
 
+    int totalNonCompletedTask(String projectCode);
+
+    int totalCompletedTask(String projectCode);
 }
