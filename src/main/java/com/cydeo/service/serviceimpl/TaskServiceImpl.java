@@ -1,6 +1,7 @@
 package com.cydeo.service.serviceimpl;
 
 import com.cydeo.dto.TaskDTO;
+import com.cydeo.entity.Project;
 import com.cydeo.entity.Task;
 import com.cydeo.enums.Status;
 import com.cydeo.mapper.TaskMapper;
@@ -38,5 +39,38 @@ public class TaskServiceImpl implements TaskService {
         taskRepository.save(task);
     }
 
+    @Override
+    public void delete(Long id) {
+        Task deletedTask=taskRepository.findTasksById(id);
+        deletedTask.setIsDeleted(true);
+        taskRepository.save(deletedTask);
+    }
+
+    @Override
+    public TaskDTO findById(Long id) {
+        return taskMapper.convertToDto(taskRepository.findTasksById(id));
+    }
+
+    @Override
+    public void update(TaskDTO taskDTO) {
+
+        Task currentTask=taskRepository.findTasksById(taskDTO.getId());
+        Task updatedTask=taskMapper.convertToEntity(taskDTO);
+        updatedTask.setId(currentTask.getId());
+        updatedTask.setTaskStatus(currentTask.getTaskStatus());
+        updatedTask.setProject(currentTask.getProject());
+        taskRepository.save(updatedTask);
+    }
+
+    @Override
+    public List<TaskDTO> listAllNonCompletedTask() {
+        return taskRepository.findAll().stream().filter(task -> (task.getTaskStatus().equals((Status.OPEN)) || task.getTaskStatus().equals((Status.IN_PROGRESS)))).map(taskMapper::convertToDto).collect(Collectors.toList());
+//        return taskRepository.findTasksByTaskStatusIsNot(Status.COMPLETE).stream().map(taskMapper::convertToDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TaskDTO> listAllCompletedTask() {
+        return taskRepository.findAll().stream().filter(task -> task.getTaskStatus().equals(Status.COMPLETE)).map(taskMapper::convertToDto).collect(Collectors.toList());
+    }
 
 }
